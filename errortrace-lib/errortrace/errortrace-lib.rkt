@@ -48,7 +48,8 @@
        [(#%plain-module-begin body ...)
         (let ()
           (define ((handle-top-form phase) expr)
-            (syntax-case* (disarm expr) (begin-for-syntax module module*) 
+            (define disarmed-expr (disarm expr))
+            (syntax-case* disarmed-expr (begin-for-syntax module module*)
                           (lambda (a b)
                             (free-identifier=? a b phase 0))
               [(begin-for-syntax body ...)
@@ -58,9 +59,13 @@
                            (syntax->list #'(body ...))))
                 expr)]
               [(module . _)
-               (transform-all-modules expr proc #f)]
+               (syntax-rearm
+                (transform-all-modules disarmed-expr proc #f)
+                expr)]
               [(module* . _)
-               (transform-all-modules expr proc #f)]
+               (syntax-rearm
+                (transform-all-modules disarmed-expr proc #f)
+                expr)]
               [else expr]))
           (define mod-id (or in-mod-id #'mod))
           (proc
