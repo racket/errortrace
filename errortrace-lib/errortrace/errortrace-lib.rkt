@@ -472,6 +472,11 @@
       [_else
        (let ([e (normal top-e)])
          (let ([meta-depth ((count-meta-levels 0) e)])
+           ;; We need to force the `require`s now, so that `e` can be compiled.
+           ;; It doesn't work to reply on `begin` unrolling for a top-level `eval`,
+           ;; because we're in a compile handler and already committed to a single form.
+           (for ([i (in-range meta-depth)])
+             (namespace-require `(for-meta ,(add1 i) errortrace/errortrace-key)))
            #`(begin
                #,(generate-key-imports meta-depth)
                #,e)))])))
