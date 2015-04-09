@@ -199,7 +199,7 @@
          (identifier? sexpr)
          (syntax (bgn e expr))]
         [(quote _) (syntax (bgn e expr))]
-        [(quote-syntax _) (syntax (bgn e expr))]
+        [(quote-syntax . _) (syntax (bgn e expr))]
         [(#%top . d) (syntax (bgn e expr))]
         [(#%variable-reference . d) (syntax (bgn e expr))]
         
@@ -300,7 +300,7 @@
   (define ((simple-rhs? phase) expr)
     (kernel-syntax-case/phase expr phase
       [(quote _) #t]
-      [(quote-syntax _) #t]
+      [(quote-syntax . _) #t]
       [(#%plain-lambda . _) #t]
       [(case-lambda . _) #t]
       [_else #f]))
@@ -478,7 +478,7 @@
          ;; No error possible
          [(quote _)
           expr]
-         [(quote-syntax _)
+         [(quote-syntax . _)
           expr]
          
          ;; Wrap body, also a profile point
