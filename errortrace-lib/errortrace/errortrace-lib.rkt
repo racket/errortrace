@@ -62,10 +62,15 @@
                (syntax-rearm
                 (transform-all-modules disarmed-expr proc #f)
                 expr)]
-              [(module* . _)
-               (syntax-rearm
-                (transform-all-modules disarmed-expr proc #f)
-                expr)]
+              [(module* name init-import . _)
+               (let ([shift (if (syntax-e #'init-import)
+                                0
+                                phase)])
+                 (syntax-rearm
+                  (syntax-shift-phase-level
+                   (transform-all-modules (syntax-shift-phase-level disarmed-expr (- shift)) proc #f)
+                   shift)
+                  expr))]
               [else expr]))
           (define mod-id (or in-mod-id #'mod))
           (proc

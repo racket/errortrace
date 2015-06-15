@@ -462,9 +462,9 @@
                          (add1 phase)))]
 
          [(module name init-import mb)
-          (annotate-module expr disarmed-expr)]
+          (annotate-module expr disarmed-expr 0)]
          [(module* name init-import mb)
-          (annotate-module expr disarmed-expr)]
+          (annotate-module expr disarmed-expr (if (syntax-e #'init-import) 0 phase))]
          
          [(#%expression e)
           (rearm expr #`(#%expression #,(no-cache-annotate (syntax e) phase)))]
@@ -620,14 +620,17 @@
                                            no-cache-annotate phase)))])]
          
          [_else
-          (error 'errortrace "unrecognized expression form~a: ~.s"
+          (error 'errortrace "unrecognized expression form~a~a: ~.s"
                  (if top? " at top-level" "")
+                 (if (zero? phase) "" (format " at phase ~a" phase))
                  (syntax->datum expr))])
        expr
        phase)))
 
-  (define (annotate-module expr disarmed-expr)
-    (syntax-case disarmed-expr ()
+  (define (annotate-module expr disarmed-expr phase)
+    (define shifted-disarmed-expr
+      (syntax-shift-phase-level disarmed-expr (- phase)))
+    (syntax-case shifted-disarmed-expr ()
       [(mod name init-import mb)
        (syntax-case (disarm #'mb) ()
          [(__plain-module-begin body ...)
@@ -639,13 +642,15 @@
                   [mb #'mb])
               (rearm
                expr
-               (rebuild
-                disarmed-expr
-                (list (cons
-                       mb
-                       (rearm
+               (syntax-shift-phase-level
+                (rebuild
+                 shifted-disarmed-expr
+                 (list (cons
                         mb
-                        (rebuild mb (map cons bodys bodyl)))))))))])]))
+                        (rearm
+                         mb
+                         (rebuild mb (map cons bodys bodyl))))))
+                phase))))])]))
   
   (define no-cache-annotate (make-annotate #f #f))
   (define (annotate expr phase)
