@@ -11,9 +11,7 @@
 
 (define (flat-begin-for-syntax-tests)
   (eval '(module m racket/base
-           (require (for-syntax racket/base)
-                    (for-meta 2 racket/base)
-                    (for-meta 3 racket/base))
+           (require (for-syntax racket/base))
            (begin-for-syntax 1 2))))
 
 (define (nested-begin-for-syntax-tests)
