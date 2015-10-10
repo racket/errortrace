@@ -54,9 +54,9 @@
                             (free-identifier=? a b phase 0))
               [(begin-for-syntax body ...)
                (syntax-rearm
-                #`(begin-for-syntax
-                   #,@(map (handle-top-form (add1 phase)) 
-                           (syntax->list #'(body ...))))
+                #`(#,(car (syntax-e disarmed-expr))
+                    #,@(map (handle-top-form (add1 phase)) 
+                            (syntax->list #'(body ...))))
                 expr)]
               [(module . _)
                (syntax-rearm
