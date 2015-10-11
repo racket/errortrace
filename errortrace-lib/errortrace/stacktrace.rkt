@@ -90,7 +90,7 @@
                                       (cons (original-stx) (expanded-stx))
                                       make-new-recover)
                            (make-new-recover)))
-       (define better-stx (and stx (recover stx)))
+       (define better-stx (or (and stx (recover stx)) stx))
        (with-syntax ([quote (syntax-shift-phase-level #'quote phase)])
          #`(quote (#,(short-version better-stx 10)
                    #,(syntax-source stx)
