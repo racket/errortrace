@@ -159,7 +159,7 @@
                     [register-profile-start register-profile-start]
                     [register-profile-done register-profile-done]
                     [app (syntax-shift-phase-level #'#%plain-app (- phase base-phase))]
-                    [lt (syntax-shift-phase-level #'let (- phase base-phase))]
+                    [lt (syntax-shift-phase-level #'let-values (- phase base-phase))]
                     [qt (syntax-shift-phase-level #'quote (- phase base-phase))]
                     [bgn (syntax-shift-phase-level #'begin (- phase base-phase))]
                     [wcm (syntax-shift-phase-level #'with-continuation-mark (- phase base-phase))])
@@ -169,7 +169,7 @@
                         bodies
                         phase)])
           (syntax
-           (lt ([start (app (qt register-profile-start) (qt key))])
+           (lt ([(start) (app (qt register-profile-start) (qt key))])
              (wcm 
               (qt profile-key)
               (qt key)
