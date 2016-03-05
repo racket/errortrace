@@ -1,7 +1,7 @@
 #lang info
 
 (define collection 'multi)
-(define deps '())
+(define deps '("errortrace-lib"))
 (define build-deps '("base"
                      "compiler-lib"))
 
