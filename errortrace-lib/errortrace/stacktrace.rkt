@@ -290,12 +290,8 @@
                                      (syntax-case vars () [(id) (syntax id)] [_else #f])
                                      rhs
                                      phase))
-                       (let loop ([names vars] [rhs rhs*])
-                         (cond
-                           [(syntax? names) (loop (syntax-e vars) rhs)]
-                           [(pair? names)
-                            (loop (cdr names) (test-coverage-point rhs (car names) phase))]
-                           [else rhs])))
+                       (for/fold ([rhs rhs*]) ([name (in-list (syntax->list vars))])
+                         (test-coverage-point rhs name phase)))
                      varss
                      rhss)]
               [bodyl (map (lambda (body) (no-cache-annotate body phase))
