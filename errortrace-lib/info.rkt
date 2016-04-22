@@ -5,3 +5,5 @@
 (define pkg-desc "implementation (no documentation) part of \"errortrace\"")
 
 (define pkg-authors '(mflatt))
+
+(define version "1.1")
