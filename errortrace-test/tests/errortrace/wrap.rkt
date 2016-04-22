@@ -1,5 +1,7 @@
 #lang racket/base
 
+(require tests/eli-tester)
+
 (define err-stx #'(error '"bad"))
 
 (define (try expr)
