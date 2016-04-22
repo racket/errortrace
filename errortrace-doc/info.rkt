@@ -8,4 +8,4 @@
 
 (define pkg-desc "documentation part of \"errortrace\"")
 
-(define pkg-authors '(mflatt))
+(define pkg-authors '(mflatt "spencer@florence.io"))

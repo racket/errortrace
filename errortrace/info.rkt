@@ -9,6 +9,6 @@
 
 (define pkg-desc "Instrumentation tools for debugging")
 
-(define pkg-authors '(mflatt))
+(define pkg-authors '(mflatt "spencer@florence.io"))
 
 (define version "1.1")
