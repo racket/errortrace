@@ -10,3 +10,5 @@
 (define pkg-desc "Instrumentation tools for debugging")
 
 (define pkg-authors '(mflatt robby florence))
+
+(define version "1.1")

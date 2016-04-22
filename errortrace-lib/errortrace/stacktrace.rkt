@@ -10,13 +10,27 @@
 (define expanded-stx (make-parameter #f))
 (define maybe-undefined (make-parameter #hasheq()))
 
-(provide stacktrace@ stacktrace^ stacktrace-imports^ original-stx expanded-stx)
+(provide stacktrace@ stacktrace^ stacktrace-imports^
+         stacktrace/annotator-imports^ stacktrace/annotator@
+         original-stx expanded-stx)
+
 (define-signature stacktrace-imports^
   (with-mark
    
    test-coverage-enabled
    test-covered
    initialize-test-coverage-point
+   
+   profile-key
+   profiling-enabled
+   initialize-profile-point
+   register-profile-start
+   register-profile-done))
+
+(define-signature stacktrace/annotator-imports^
+  (with-mark
+   
+   test-coverage-point
    
    profile-key
    profiling-enabled
@@ -46,7 +60,37 @@
 (define-unit stacktrace@
   (import stacktrace-imports^)
   (export stacktrace^)
-  
+         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Test case coverage instrumenter
+ 
+  ;; The next procedure is called by `annotate' and `annotate-top' to wrap
+  ;; expressions with test suite coverage information.  Returning the
+  ;; first argument means no tests coverage information is collected.
+ 
+  ;; test-coverage-point : syntax syntax phase -> syntax
+  ;; sets a test coverage point for a single expression
+  (define (test-coverage-point body expr phase)
+    (if (and (test-coverage-enabled)
+             (zero? phase) 
+             (syntax-position expr))
+      (begin (initialize-test-coverage-point expr)
+             (let ([thunk (test-covered expr)])
+               (cond [(procedure? thunk)
+                      (with-syntax ([body body] [thunk thunk])
+                        #'(begin (#%plain-app thunk) body))]
+                     [(syntax? thunk)
+                      (with-syntax ([body body] [thunk thunk])
+                        #'(begin thunk body))]
+                     [else body])))
+      body))
+
+
+  (define-values/invoke-unit/infer stacktrace/annotator@))
+
+(define-unit stacktrace/annotator@
+  (import stacktrace/annotator-imports^)
+  (export stacktrace^)
+
   (define (short-version v depth)
     (cond
       [(identifier? v) (syntax-e v)]
@@ -107,32 +151,6 @@
   (define (st-mark-bindings x) null)
   
   
-       ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; Test case coverage instrumenter
- 
-  ;; The next procedure is called by `annotate' and `annotate-top' to wrap
-  ;; expressions with test suite coverage information.  Returning the
-  ;; first argument means no tests coverage information is collected.
- 
-  ;; test-coverage-point : syntax syntax phase -> syntax
-  ;; sets a test coverage point for a single expression
-  (define (test-coverage-point body expr phase)
-    (if (and (test-coverage-enabled)
-             (zero? phase)
-             (syntax-position expr))
-      (begin (initialize-test-coverage-point expr)
-             (let ([thunk (test-covered expr)])
-               (cond [(procedure? thunk)
-                      (with-syntax ([body body] [thunk thunk])
-                        #'(begin (#%plain-app thunk) body))]
-                     [(syntax? thunk)
-                      (with-syntax ([body body] [thunk thunk])
-                        #'(begin thunk body))]
-                     [else body])))
-      body))
-
-
-
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Profiling instrumenter
   
