@@ -7,4 +7,4 @@
 
 (define pkg-desc "tests for \"errortrace\"")
 
-(define pkg-authors '(mflatt))
+(define pkg-authors '(mflatt robby florence))

@@ -4,4 +4,4 @@
 
 (define pkg-desc "implementation (no documentation) part of \"errortrace\"")
 
-(define pkg-authors '(mflatt))
+(define pkg-authors '(mflatt robby florence))
