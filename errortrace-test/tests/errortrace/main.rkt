@@ -7,6 +7,7 @@
          "phase-1-eval.rkt"
          "begin.rkt"
          "coverage-let.rkt"
+         "coverage-define-syntax.rkt"
          "test-compile-time.rkt")
 
 (wrap-tests)
@@ -14,6 +15,7 @@
 (test do (alert-tests))
 (test do (letrec-test))
 (test do (test-phase-coverage))
+(test do (define-syntax-test))
 
 (phase-1-tests)
 (phase-1-eval-tests)
