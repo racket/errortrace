@@ -42,6 +42,9 @@ Then,
                Racket interactively, include the @Flag{i} flag
                before @Flag{l}:
                @commandline{racket -i -l errortrace}}
+
+         @item{To instrument the contents of a collection or package, compile
+               it with: @commandline{raco setup --mode errortrace ...}}
          ]
 
 After starting @racketmodname[errortrace] in one of these ways, when an
