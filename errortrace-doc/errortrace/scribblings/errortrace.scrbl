@@ -73,7 +73,7 @@ of Errortrace-specific @filepath{.zo} files.
   loaded as compiled byte code (i.e., from a @filepath{.zo} file) or
   native code (i.e., from a @filepath{.dll}, @filepath{.so} or 
   @filepath{.dylib} file). You can use the @DFlag{mode errortrace} flag
-  to @exec{setup-plt} to create @filepath{.zo} files with
+  to @exec{raco setup} to create @filepath{.zo} files with
   Errortrace information.
 
 Explicitly requiring @racketmodname[errortrace] within a module is
