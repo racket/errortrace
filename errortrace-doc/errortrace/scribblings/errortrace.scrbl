@@ -417,7 +417,7 @@ hardwired to return @racket[null]. }
 
 @defproc[(with-mark [source-stx any/c]
                     [dest-stx any/c]
-                    [phase nonnegative-exact-integer?]) 
+                    [phase exact-nonnegative-integer?]) 
          any/c]{
 
 Called by @racketout[annotate] and @racketout[annotate-top] to wrap
@@ -520,7 +520,7 @@ may not have appeared in an expression position. @racket[phase] is the phase lev
 
 @defproc[(with-mark [source-stx any/c]
                     [dest-stx any/c]
-                    [phase nonnegative-exact-integer?])
+                    [phase exact-nonnegative-integer?])
          any/c]{
 Same as in @racket[stacktrace-imports^].}
 
