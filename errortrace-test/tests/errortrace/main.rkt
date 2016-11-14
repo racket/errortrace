@@ -10,6 +10,7 @@
          "coverage-let.rkt"
          "coverage-define-syntax.rkt"
          "define-syntaxes-id-test.rkt"
+         "profile.rkt"
          "test-compile-time.rkt")
 
 (wrap-tests)
@@ -24,3 +25,4 @@
 (phase-1-eval-tests)
 (phase-2-profile-tests)
 (begin-for-syntax-tests)
+(profile-tests)

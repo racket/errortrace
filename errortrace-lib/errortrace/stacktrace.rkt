@@ -257,6 +257,12 @@
              (syntax (bgn e expr))
              ;; application; exploit guaranteed left-to-right evaluation
              (insert-at-tail* se sexpr phase))]
+
+        [(#%expression e)
+         (rearm
+          sexpr
+          (rebuild sexpr
+                   (list (cons #'e (insert-at-tail se (syntax e) phase)))))]
         
         [_else
          (error 'errortrace
