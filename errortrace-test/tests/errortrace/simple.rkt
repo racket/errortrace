@@ -10,6 +10,14 @@
 
 (define et-ns (make-base-namespace))
 (parameterize ([current-namespace et-ns])
+  ;; Modules compiled before errortrace, so
+  ;; generated expressions should not be instrumented:
+  (eval '(module m racket/base
+          (define-syntax-rule (div x)
+            (+ 0 (/ x)))
+          (provide div)))
+  (namespace-require ''m)
+  ;; Load errortrace:
   (dynamic-require 'errortrace #f))
 
 (define plain-ns (make-base-namespace))
@@ -22,7 +30,15 @@
 
 (define orig (read-syntax 'orig (open-input-string "x")))
 (define (to-original d)
-  (namespace-syntax-introduce (datum->syntax #f d orig orig)))
+  (namespace-syntax-introduce
+   ;; A plain (datum->syntax #f d orig orig) is not
+   ;; good enough to put a property on all contained objects,
+   ;; because the property is only put on the immediate syntax object
+   (let loop ([d d])
+     (define v (cond
+                [(pair? d) (cons (loop (car d)) (loop (cdr d)))]
+                [else d]))
+     (datum->syntax #f v orig orig))))
 
 (define (normalize d)
   (datum-case d (with-continuation-mark begin quote inspector)
@@ -71,6 +87,12 @@
 (check '(car (list))
        '(with-continuation-mark ? ? (car (list)))
        '(car (list)))
+(check '(+ 1 (/ 0))
+       '(with-continuation-mark ? ? (+ 1 (with-continuation-mark ? ? (/ 0)))))
+(check '(+ 1 (+ 0 (/ 0)))
+       '(with-continuation-mark ? ? (+ 1 (with-continuation-mark ? ? (+ 0 (with-continuation-mark ? ? (/ 0)))))))
+(check '(+ 1 (div 0))
+       '(with-continuation-mark ? ? (+ 1 (with-continuation-mark ? ? (+ 0 (/ 0))))))
 
 ;; Wrappers in these cases shouldn't get in the way of optimizations:
 (check '(+ 1 3)

@@ -1,6 +1,9 @@
-#lang racket/base
+#lang at-exp racket/base
 
-(define err-stx #'(error '"bad"))
+(define err-stx
+  ;; Using `read-syntax` ensures that it's syntax-original:
+  (read-syntax 'source
+               @open-input-string{(error '"bad")}))
 
 (define (try expr)
   (define out-str
