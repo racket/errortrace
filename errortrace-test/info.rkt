@@ -3,7 +3,8 @@
 (define collection 'multi)
 (define deps '("errortrace-lib" "eli-tester" "rackunit-lib"))
 (define build-deps '("base"
-                     "compiler-lib"))
+                     "compiler-lib"
+                     "at-exp-lib"))
 
 (define pkg-desc "tests for \"errortrace\"")
 
