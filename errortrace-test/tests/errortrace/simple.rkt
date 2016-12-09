@@ -99,3 +99,17 @@
        '4)
 (check '(car (list 1))
        '1)
+
+;; Interesting syntax literals for errortrace to traverse
+(check '#(0 1 2)
+       '#(0 1 2))
+(check '#&(0)
+       '#&(0))
+(check '#s(a 0 1 2)
+       '#s(a 0 1 2))
+(check '#hash((a . 0))
+       '#hash((a . 0)))
+(check '#hasheq((a . 0))
+       '#hasheq((a . 0)))
+(check '#hasheqv((a . 0))
+       '#hasheqv((a . 0)))

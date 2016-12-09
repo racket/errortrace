@@ -296,7 +296,7 @@
           (add-annotate-property (cdr s)))]
    [(vector? s)
     (for/vector #:length (vector-length s) ([e (in-vector s)])
-                (add-annotate-property s))]
+                (add-annotate-property e))]
    [(box? s) (box (add-annotate-property (unbox s)))]
    [(prefab-struct-key s)
     => (lambda (k)
@@ -307,13 +307,13 @@
     (cond
      [(hash-eq? s)
       (for/hasheq ([(k v) (in-hash s)])
-        (values k (add-annotate-property s)))]
+        (values k (add-annotate-property v)))]
      [(hash-eqv? s)
       (for/hasheqv ([(k v) (in-hash s)])
-        (values k (add-annotate-property s)))]
+        (values k (add-annotate-property v)))]
      [else
       (for/hash ([(k v) (in-hash s)])
-        (values k (add-annotate-property s)))])]
+        (values k (add-annotate-property v)))])]
    [else s]))
 
 (define-values/invoke-unit/infer stacktrace/filter@)
