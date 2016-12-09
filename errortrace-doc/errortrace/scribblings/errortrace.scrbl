@@ -367,7 +367,7 @@ Errortrace run-time support.}
 The errortrace collection also includes a
 @racketmodname[errortrace/stacktrace] library. It exports
 the @racket[stacktrace@] unit (plus a few generalized variants), its import signature
-@racket[stacktrace-imports^] (plus signatures for genealizations), and its export signature
+@racket[stacktrace-imports^] (plus signatures for generalizations), and its export signature
 @racket[stacktrace^].}
 
 @defthing[stacktrace@ unit?]{
