@@ -586,7 +586,18 @@ independent of the result for @racket[stx].
 
 The default filter function used by @racket[stacktrace@] and
 @racket[stacktrace/annotator@] annotates an expression if it has a
-source location according to @racket[syntax-source].}}
+source location according to @racket[syntax-source].
+
+  When used via the @racketmodname[errortrace] meta-language
+  or when @racket[require]ing the @racketmodname[errortrace]
+  module or when using errortrace via the "Debugging" option
+  in DrRacket, the @racket[should-annotate?] function checks
+  to make sure that the syntax object has a source location
+  and has the
+  @tech[#:doc '(lib "scribblings/reference/reference.scrbl")]{
+   syntax property} @racket['errortrace:annotate].
+
+}}
 
 
 @section{Errortrace Key}
