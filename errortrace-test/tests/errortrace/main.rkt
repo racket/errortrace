@@ -11,6 +11,7 @@
          "coverage-define-syntax.rkt"
          "define-syntaxes-id-test.rkt"
          "profile.rkt"
+         "cross-phase.rkt"
          "test-compile-time.rkt")
 
 (wrap-tests)
@@ -26,3 +27,4 @@
 (phase-2-profile-tests)
 (begin-for-syntax-tests)
 (profile-tests)
+(cross-phase-tests)
