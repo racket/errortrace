@@ -739,7 +739,7 @@
            (for ([i (in-range meta-depth)])
              (namespace-require `(for-meta ,(add1 i) errortrace/errortrace-key))))
          #`(begin
-             #,(generate-key-imports meta-depth)
+             #,(generate-key-imports-at-phase meta-depth (namespace-base-phase))
              #,e))]))
 
   (define (has-cross-phase-declare? e)
