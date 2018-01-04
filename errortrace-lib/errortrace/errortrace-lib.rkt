@@ -41,7 +41,9 @@
 (define (disarm stx)
   (syntax-disarm stx code-insp))
 
-(define (transform-all-modules stx proc [in-mod-id (namespace-module-identifier)])
+;; given a module declaration, apply proc to the module itself and all submodules
+;; within it. when in-mod-id is not false, replace the module identifeir with in-mod-id.
+(define (transform-all-modules stx proc [in-mod-id #f])
   (syntax-case stx ()
     [(mod name init-import mb)
      (syntax-case (disarm #'mb) (#%plain-module-begin)
@@ -60,7 +62,7 @@
                 expr)]
               [(module . _)
                (syntax-rearm
-                (transform-all-modules disarmed-expr proc #f)
+                (transform-all-modules disarmed-expr proc)
                 expr)]
               [(module* name init-import . _)
                (let ([shift (if (syntax-e #'init-import)
@@ -68,7 +70,7 @@
                                 phase)])
                  (syntax-rearm
                   (syntax-shift-phase-level
-                   (transform-all-modules (syntax-shift-phase-level disarmed-expr (- shift)) proc #f)
+                   (transform-all-modules (syntax-shift-phase-level disarmed-expr (- shift)) proc)
                    shift)
                   expr))]
               [else expr]))
@@ -532,7 +534,11 @@
                                            #`(#%plain-module-begin
                                               #,(generate-key-imports meta-depth)
                                               body ...)
-                                           #'mb))))])]))))])))]
+                                           #'mb))))])]))
+                 ;; Use the module identifier at phase `phase`. By default, this new identifier should
+                 ;; fall through `add-test-coverage-init-code` since in `add-test-coverage-init-code`
+                 ;; we use the default value for `in-mod-id`, `#f`, to call `transform-all-modules`.
+                 (namespace-module-identifier)))])))]
       [_else
        (let ([e (normal top-e)])
          (let ([meta-depth ((count-meta-levels 0) e)])
