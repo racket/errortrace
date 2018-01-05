@@ -3,6 +3,7 @@
 (require tests/eli-tester
          "wrap.rkt"
          "alert.rkt"
+         "phase-0-eval.rkt"
          "phase-1.rkt"
          "phase-1-eval.rkt"
          "phase-2-profile.rkt"
@@ -28,3 +29,4 @@
 (begin-for-syntax-tests)
 (profile-tests)
 (cross-phase-tests)
+(phase-0-eval-tests)
