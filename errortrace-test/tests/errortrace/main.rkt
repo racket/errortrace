@@ -6,6 +6,7 @@
          "phase-0-eval.rkt"
          "phase-1.rkt"
          "phase-1-eval.rkt"
+         "phase-1-top-module.rkt"
          "phase-2-profile.rkt"
          "begin.rkt"
          "coverage-let.rkt"
@@ -30,3 +31,4 @@
 (profile-tests)
 (cross-phase-tests)
 (phase-0-eval-tests)
+(phase-1-top-module-tests)

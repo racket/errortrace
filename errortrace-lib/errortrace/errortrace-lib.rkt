@@ -8,6 +8,7 @@
          "private/utils.rkt"
          racket/contract/base
          racket/unit
+         syntax/kerncase
          (for-template racket/base "errortrace-key.rkt")
          (for-syntax racket/base))
 
@@ -495,22 +496,11 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define errortrace-annotate
-  (lambda (top-e)
-    (define (normal e)
-      (define expanded-e (expand-syntax (add-annotate-property e)))
-      (parameterize ([original-stx e]
-                     [expanded-stx expanded-e])
-        (annotate-top expanded-e (namespace-base-phase))))
+(define errortrace-annotate-expanded-top-module
+  (lambda (top-e phase)
     (syntax-case top-e ()
       [(mod name . reste)
-       (and (identifier? #'mod)
-            (free-identifier=? #'mod 
-                               (namespace-module-identifier)
-                               (namespace-base-phase)))
-       (if (eq? (syntax-e #'name) 'errortrace-key)
-           top-e
-           (let ([expanded-e (normal top-e)])
+           (let ([expanded-e top-e])
              (cond
               [(has-cross-phase-declare?
                 (syntax-case expanded-e ()
@@ -538,7 +528,54 @@
                  ;; Use the module identifier at phase `phase`. By default, this new identifier should
                  ;; fall through `add-test-coverage-init-code` since in `add-test-coverage-init-code`
                  ;; we use the default value for `in-mod-id`, `#f`, to call `transform-all-modules`.
-                 (namespace-module-identifier)))])))]
+                 (namespace-module-identifier phase)))]))])))
+
+(define errortrace-annotate-expanded-top-modules
+  (lambda (top-e phase)
+    (kernel-syntax-case/phase top-e phase
+      [(mod name . reste)
+       (and (identifier? #'mod)
+            (free-identifier=? #'mod
+                               (namespace-module-identifier phase)
+                               phase))
+       (errortrace-annotate-expanded-top-module top-e phase)]
+      [(begin . exprs)
+       (copy-props
+        top-e
+        #`(#,(car (syntax-e top-e))
+           .
+           #,(map (λ (top-e) (errortrace-annotate-expanded-top-modules top-e phase))
+                  (syntax->list #'exprs))))]
+      [(begin-for-syntax . exprs)
+       (copy-props
+        top-e
+        #`(#,(car (syntax-e top-e))
+           .
+           #,(map (λ (top-e) (errortrace-annotate-expanded-top-modules top-e (add1 phase)))
+                  (syntax->list #'exprs))))]
+      [_else
+       top-e])))
+
+(define errortrace-annotate
+  (lambda (top-e)
+    (define (normal e)
+      (define expanded-e (expand-syntax (add-annotate-property e)))
+      (define annotated-e
+        (parameterize ([original-stx e]
+                       [expanded-stx expanded-e])
+          (annotate-top expanded-e (namespace-base-phase))))
+      (errortrace-annotate-expanded-top-modules annotated-e (namespace-base-phase)))
+    (syntax-case top-e ()
+      ;; Assuming errortrace/errortrace-key always appears at top-level,
+      ;; never in a begin-for-syntax. Maybe there could be a more robust check.
+      [(mod name . reste)
+       (and (identifier? #'mod)
+            (free-identifier=? #'mod
+                               (namespace-module-identifier)
+                               (namespace-base-phase)))
+       (if (eq? (syntax-e #'name) 'errortrace-key)
+           top-e
+           (normal top-e))]
       [_else
        (let ([e (normal top-e)])
          (let ([meta-depth ((count-meta-levels 0) e)])
