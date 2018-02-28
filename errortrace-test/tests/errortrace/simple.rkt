@@ -56,6 +56,9 @@
 ;; make sure that it is *different* than `et'.
 (define (check et plain [alt #f])
   (define et-exp (datum-case (do-expand et to-original et-ns) (begin #%require quote)
+                   ;; v7.x
+                   [(begin _ expr) (normalize (datum expr))]
+                   ;; v6.x
                    [(begin (quote _ _) (begin (#%require _ _) expr)) (normalize (datum expr))]))
   (define plain-exp (normalize (do-expand plain values plain-ns)))
   (define alt-exp (normalize (do-expand alt values plain-ns)))
