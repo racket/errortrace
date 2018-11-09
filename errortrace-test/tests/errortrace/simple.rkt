@@ -68,23 +68,9 @@
     (when (equal? et-exp alt-exp)
       (error 'errortrace-test "failed (shouldn't match): ~s versus ~s" et-exp plain-exp))))
 
-;; Check that known functions like `void' are not wrapped
-;; when applied to the right number of arguments, but other
-;; functions are:
-(check '1 '1)
-(check '(void)
-       '(void))
-(check '(void 1 2 3)
-       '(void 1 2 3))
-(check '(void free)
-       '(void (with-continuation-mark ? ? free)))
 (check '(cons)
        '(with-continuation-mark ? ? (cons))
        '(cons))
-(check '(cons 1 2)
-       '(cons 1 2))
-(check '(list)
-       '(list))
 (check '(list*)
        '(with-continuation-mark ? ? (list*)))
 (check '(car (list))
