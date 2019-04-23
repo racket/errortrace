@@ -5,6 +5,7 @@
          "alert.rkt"
          "phase-1.rkt"
          "phase-1-eval.rkt"
+         "phase-1-module.rkt"
          "phase-2-profile.rkt"
          "begin.rkt"
          "coverage-let.rkt"
@@ -24,6 +25,7 @@
 
 (phase-1-tests)
 (phase-1-eval-tests)
+(phase-1-module-tests)
 (phase-2-profile-tests)
 (begin-for-syntax-tests)
 (profile-tests)
