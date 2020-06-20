@@ -3,6 +3,7 @@
 (define collection 'multi)
 (define deps '("errortrace-lib" "eli-tester" "rackunit-lib"))
 (define build-deps '("base"
+                     "racket-index"
                      "compiler-lib"
                      "at-exp-lib"))
 
