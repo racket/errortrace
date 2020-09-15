@@ -4,6 +4,7 @@
          syntax/kerncase
          syntax/stx
          syntax/source-syntax
+         syntax/modresolve
          "private/utils.rkt"
          "errortrace-key.rkt"
          (for-template racket/base "errortrace-key.rkt")
@@ -703,7 +704,7 @@
             (free-identifier=? #'mod
                                (namespace-module-identifier)
                                (namespace-base-phase)))
-       (if (eq? (syntax-e #'name) 'errortrace-key)
+       (if (equal? (syntax-source top-e) (resolve-module-path 'errortrace/errortrace-key))
            top-e
            (let ([expanded-e (do-expand top-e)])
              (cond
