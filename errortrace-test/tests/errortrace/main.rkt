@@ -30,3 +30,4 @@
 (begin-for-syntax-tests)
 (profile-tests)
 (cross-phase-tests)
+(cross-phase-2-tests)
