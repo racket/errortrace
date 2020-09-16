@@ -8,4 +8,5 @@
   (parameterize ([current-namespace ns])
     (dynamic-require 'errortrace #f)
     (eval '(module cross-phase '#%kernel
+            (define-values (a) 1)
             (#%declare #:cross-phase-persistent)))))
