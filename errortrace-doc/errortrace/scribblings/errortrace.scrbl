@@ -456,11 +456,10 @@ hardwired to return @racket[null]. }
  @defproc[(errortrace-annotate [stx syntax?]
                                [in-compile-handler? boolean? #t])
           syntax?]{
-  Adds the property @racket['errortrace:annotate] to everywhere inside
-  @racket[stx], expands it and then calls @racketout[annotate-top] with the result.
   If @racket[stx] is a module (but not named @racketidfont{errortrace-key}
-  module nor a @tech[#:doc '(lib "scribblings/reference/reference.scrbl")]{cross-phase persistent} module),
-  inserts appropriate requires to the @racketidfont{errortrace-key} module.
+  module nor a @tech[#:doc '(lib "scribblings/reference/reference.scrbl")]{cross-phase persistent} module), adds the property @racket['errortrace:annotate] to everywhere inside
+  @racket[stx], expands it and then calls @racketout[annotate-top] with the result.
+  Also inserts appropriate requires to the @racketidfont{errortrace-key} module.
 
   If @racket[in-compile-handler?] is true, also calls @racket[namespace-require]
   to load @racketidfont{errortrace-key}.

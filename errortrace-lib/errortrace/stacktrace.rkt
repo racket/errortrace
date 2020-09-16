@@ -692,7 +692,7 @@
       (define expanded-e (expand-syntax (add-annotate-property e)))
       (parameterize ([original-stx e]
                      [expanded-stx expanded-e])
-        (annotate-top expanded-e (namespace-base-phase))))
+        (values expanded-e (annotate-top expanded-e (namespace-base-phase)))))
     (syntax-case top-e ()
       [(mod name . reste)
        (and (identifier? #'mod)
@@ -701,12 +701,12 @@
                                (namespace-base-phase)))
        (if (eq? (syntax-e #'name) 'errortrace-key)
            top-e
-           (let ([expanded-e (normal top-e)])
+           (let-values ([(unannotated-e expanded-e) (normal top-e)])
              (cond
                [(has-cross-phase-declare?
                  (syntax-case expanded-e ()
                    [(mod name init-import mb) #'mb]))
-                expanded-e]
+                unannotated-e]
                [else
                 (transform-all-modules
                  expanded-e
@@ -726,7 +726,7 @@
                                            #'mb))))])])))])))]
       [_else
        (let ()
-         (define e (normal top-e))
+         (define-values (_unannotated-e e) (normal top-e))
          (define meta-depth ((count-meta-levels 0) e))
          (when in-compile-handler?
            ;; We need to force the `require`s now, so that `e` can be compiled.
