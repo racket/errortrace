@@ -741,7 +741,7 @@
   (define (has-cross-phase-declare? e)
     (for/or ([a (in-list (or (syntax->list e) '()))])
       (syntax-case* a (#%declare begin) (lambda (a b)
-                                          (free-identifier=? a b 0 (namespace-base-phase)))
+                                          (free-identifier=? a b 0 base-phase))
         [(#%declare kw ...)
          (for/or ([kw (in-list (syntax->list #'(kw ...)))])
            (eq? (syntax-e kw) '#:cross-phase-persistent))]
