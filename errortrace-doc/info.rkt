@@ -9,3 +9,6 @@
 (define pkg-desc "documentation part of \"errortrace\"")
 
 (define pkg-authors '(mflatt robby florence))
+
+(define license
+  '(Apache-2.0 OR MIT))

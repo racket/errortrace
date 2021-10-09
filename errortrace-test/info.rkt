@@ -10,3 +10,6 @@
 (define pkg-desc "tests for \"errortrace\"")
 
 (define pkg-authors '(mflatt robby florence))
+
+(define license
+  '(Apache-2.0 OR MIT))
