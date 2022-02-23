@@ -31,6 +31,11 @@ Then,
 
                @commandline{racket -l errortrace -t @nonterm{prog}}}
 
+         @item{If your program has a module file @nonterm{prog} with a submodule @nonterm{sub},
+               run it with
+
+               @commandline{racket -l racket/init -l errortrace -e '(require (submod @nonterm{prog} @nonterm{sub}))'}}
+
          @item{If your program is a non-module top-level sequence of
                definitions and expressions, you can instead add
                @racketblock[(require errortrace)]
@@ -41,7 +46,8 @@ Then,
          @item{If you have no main program and you want to use
                Racket interactively, include the @Flag{i} flag
                before @Flag{l}:
-               @commandline{racket -i -l errortrace}}
+               @commandline{racket -i -l errortrace}
+               The order of the flags is important.}
 
          @item{To instrument the contents of a collection or package, compile
                it with: @commandline{raco setup -j 1 --mode errortrace
