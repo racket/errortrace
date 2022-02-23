@@ -39,9 +39,9 @@ Then,
          @item{If your program is a non-module top-level sequence of
                definitions and expressions, you can instead add
                @racketblock[(require errortrace)]
-               to the beginning of the program or start Racket with the @Flag{l} option before the
+               to the beginning of the program, or start Racket with the @Flag{l} option before the
                arguments to load your program:
-               @commandline{racket -l errortrace ...}}
+               @commandline{racket -l racket/init -l errortrace -f @nonterm{prog}}}
 
          @item{If you have no main program and you want to use
                Racket interactively, include the @Flag{i} flag
