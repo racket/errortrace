@@ -108,3 +108,5 @@
        '#hasheq((a . 0)))
 (check '#hasheqv((a . 0))
        '#hasheqv((a . 0)))
+(check '#hashalw((a . 0))
+       '#hashalw((a . 0)))

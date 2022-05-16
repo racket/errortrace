@@ -797,6 +797,9 @@
          [(hash-eqv? s)
           (for/hasheqv ([(k v) (in-hash s)])
             (values k (add-annotate-property v)))]
+         [(hash-equal-always? s)
+          (for/hashalw ([(k v) (in-hash s)])
+            (values k (add-annotate-property v)))]
          [else
           (for/hash ([(k v) (in-hash s)])
             (values k (add-annotate-property v)))])]
