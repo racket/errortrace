@@ -16,12 +16,14 @@
 (unless (regexp-match? #rx"errortrace\\.\\.\\.:\n[^\n]*[(][+] 1 x[)]" (get-output-bytes o))
   (error "expected expression not in the error output"))
 
-(unless (string-prefix? (get-output-string o) "+: contract violation\n  expected: number?\n  given: 'bad\n  errortrace...:\n")
-  (error "unexpected format (without custom msg)"))
+(unless (string-prefix? (get-output-string o)
+                        "+: contract violation\n  expected: number?\n  given: 'bad\n")
+  (error "unexpected format (without custom msg):" (get-output-string o)))
 
 (define o2 (open-output-bytes))
 (parameterize ([current-error-port o2])
   ((error-display-handler) "foobar" failed))
 
-(unless (string-prefix? (get-output-string o2) "foobar\n  message: +: contract violation\n  expected: number?\n  given: 'bad\n  errortrace...:\n")
-  (error "unexpected format (with custom msg)"))
+(unless (string-prefix? (get-output-string o2)
+                        "foobar\n  message: +: contract violation\n  expected: number?\n  given: 'bad\n")
+  (error "unexpected format (with custom msg):" (get-output-string o2)))
