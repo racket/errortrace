@@ -21,15 +21,14 @@
 
 
 ;; generate imports for errortrace/errortrace-key at (syntax-local-phase-level)
-(define (generate-key-imports meta-depth)
-  (generate-key-imports-at-phase meta-depth (syntax-local-phase-level)))
+(define (generate-key-imports meta-depth key-module-name)
+  (generate-key-imports-at-phase meta-depth (syntax-local-phase-level) key-module-name))
 
-(define (generate-key-imports-at-phase meta-depth phase)
+(define (generate-key-imports-at-phase meta-depth phase key-module-name)
   (syntax-shift-phase-level
    (let loop ([meta-depth meta-depth])
      (let ([e ((make-syntax-introducer)
-               #`(#%require (for-meta #,meta-depth
-                                      errortrace/errortrace-key)))])
+               #`(#%require (for-meta #,meta-depth #,key-module-name)))])
        (if (zero? meta-depth)
            e
            #`(begin #,e #,(loop (sub1 meta-depth))))))

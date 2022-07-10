@@ -421,6 +421,13 @@ and exports @racket[stacktrace/errortrace-annotate^].
 
 @history[#:added "1.3"]}
 
+@defthing[stacktrace/errortrace-annotate/key-module-name@ unit?]{
+
+Imports @racket[stacktrace/annotator-imports^] and @racket[key-module-name^] and exports @racket[stacktrace/errortrace-annotate^].
+
+@history[#:added "1.4"]
+}
+
 
 @defsignature[stacktrace^ ()]{
 
@@ -615,6 +622,15 @@ Same as in @racket[stacktrace-imports^].}
 
 Same as @racket[stacktrace-imports^].}
 
+}
+
+@defsignature[key-module-name^ ()]{
+ @defthing[key-module-name module-path?]{
+  References to this module are inserted into each compile, such that references to
+  its exported identifiers can be inserted by @racket[with-mark]
+  (as in @racket[stacktrace-imports^] and @racket[stacktrace/annotator-imports^]).
+ }
+ @history[#:added "1.4"]
 }
 
 
