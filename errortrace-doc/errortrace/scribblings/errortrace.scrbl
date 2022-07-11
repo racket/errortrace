@@ -351,7 +351,7 @@ for use as an error display handler.}
 @defproc[(errortrace-annotate (stx any/c)) any/c]{
 
 Macro-expands and instruments the given top-level form. If the form is
-a module named @racketidfont{errortrace-key}, no instrumentation is
+the module @racketidfont{errortrace/errortrace-key}, no instrumentation is
 applied. See the signature element
 @sigelem[stacktrace/errortrace-annotate^ errortrace-annotate]
 (of @racket[stacktrace/errortrace-annotate^])
@@ -367,7 +367,7 @@ for @racket[stx]; @racket[(namespace-base-phase)] is typically the
 right value for the @racket[phase-level] argument.
 
 Unlike @racket[errortrace-annotate], there no special case for
-a module named @racketidfont{errortrace-key}. Also, if @racket[stx] is a module
+the module @racketidfont{errortrace/errortrace-key}. Also, if @racket[stx] is a module
 declaration, it is not enriched with imports to explicitly load
 Errortrace run-time support.}
 
@@ -474,7 +474,7 @@ hardwired to return @racket[null]. }
           syntax?]{
   Adds the property @racket['errortrace:annotate] to everywhere inside
   @racket[stx], and expands it.
-  If @racket[stx] is a module (but not named @racketidfont{errortrace-key}
+  If @racket[stx] is a module (but not the @racketidfont{errortrace/errortrace-key}
   module nor a @tech[#:doc '(lib "scribblings/reference/reference.scrbl")]{cross-phase persistent} module),
   calls @racketout[annotate-top] with the expanded code and inserts appropriate requires
   to the @racketidfont{errortrace-key} module.
