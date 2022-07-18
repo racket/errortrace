@@ -1,19 +1,8 @@
 #lang racket
 
-(require rackunit
-         racket/runtime-path)
+(require rackunit)
 
-(define-runtime-path lang.rkt "./lang.rkt")
+(require "lang.rkt")
 
-(define in (open-input-string "(f 0)"))
-(define out (open-output-string))
-
-(void
- (parameterize ([current-input-port in]
-                [current-output-port out])
-   (system* (find-executable-path "racket")
-            "--repl"
-            "--eval"
-            (~a "(enter! (file \"" lang.rkt "\"))"))))
-
-(check regexp-match "> 1/10\n" (get-output-string out))
+(parameterize ([current-namespace (module->namespace "lang.rkt")])
+  (check-equal? (eval '(#%top-interaction . (f 0))) 1/10))
