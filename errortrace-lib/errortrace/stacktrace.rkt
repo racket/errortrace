@@ -13,8 +13,6 @@
 (define expanded-stx (make-parameter #f))
 (define maybe-undefined (make-parameter #hasheq()))
 
-;; todo: document key-module-name^ and stacktrace/errortrace-annotate/key-module-name@
-
 (provide stacktrace@ stacktrace^ stacktrace-imports^ key-module-name^
          stacktrace/annotator-imports^ stacktrace/annotator@
          stacktrace-filter^ stacktrace/annotator/filter@ stacktrace/filter@
