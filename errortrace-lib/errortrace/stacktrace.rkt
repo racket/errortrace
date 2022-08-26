@@ -714,7 +714,7 @@
             (free-identifier=? #'mod
                                (namespace-module-identifier)
                                (namespace-base-phase)))
-       (if (eq? (syntax-e #'name) 'errortrace-key)
+       (if (is-key-module? top-e)
            top-e
            (let ([expanded-e (do-expand top-e)])
              (cond
@@ -752,6 +752,13 @@
          #`(begin
              #,(generate-key-imports-at-phase meta-depth (namespace-base-phase) key-module-name)
              #,e))]))
+
+  (define (is-key-module? stx)
+    (syntax-case stx ()
+      [(_module _name _lang (_void (_quote #:errortrace-dont-annotate)) . _more) #t]
+      [(_module _name . _more)
+       (eq? (syntax-e #'name) 'errortrace-key)]
+      [_ #f]))
 
   (define (has-cross-phase-declare? e)
     (for/or ([a (in-list (or (syntax->list e) '()))])
