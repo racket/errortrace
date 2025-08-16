@@ -14,7 +14,8 @@
          "define-syntaxes-id-test.rkt"
          "profile.rkt"
          "cross-phase.rkt"
-         "test-compile-time.rkt")
+         "test-compile-time.rkt"
+         "no-hash-req-module.rkt")
 
 (wrap-tests)
 
@@ -32,3 +33,4 @@
 (profile-tests)
 (cross-phase-tests)
 (phase-0-eval-tests)
+(no-hash-req-module-tests)

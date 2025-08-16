@@ -734,7 +734,7 @@
                             #`(#,mod-id name init-import
                                         #,(syntax-rearm
                                            #`(#%plain-module-begin
-                                              #,(generate-key-imports meta-depth key-module-name)
+                                              #,(generate-key-imports-at-phase meta-depth 0 key-module-name)
                                               body ...)
                                            #'mb))))])])))])))]
       [_else
