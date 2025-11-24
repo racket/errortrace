@@ -715,28 +715,22 @@
        (if (is-key-module? top-e)
            top-e
            (let ([expanded-e (do-expand top-e)])
-             (cond
-               [(has-cross-phase-declare?
-                 (syntax-case expanded-e ()
-                   [(mod name init-import mb) #'mb]))
-                expanded-e]
-               [else
-                (transform-all-modules
-                 (do-annotate top-e expanded-e)
-                 (lambda (top-e mod-id)
-                   (syntax-case top-e ()
-                     [(mod name init-import mb)
-                      (syntax-case (disarm #'mb) (#%plain-module-begin)
-                        [(#%plain-module-begin body ...)
-                         (let ([meta-depth ((count-meta-levels 0) #'(begin body ...))])
-                           (copy-props
-                            top-e
-                            #`(#,mod-id name init-import
-                                        #,(syntax-rearm
-                                           #`(#%plain-module-begin
-                                              #,(generate-key-imports-at-phase meta-depth 0 key-module-name)
-                                              body ...)
-                                           #'mb))))])])))])))]
+             (transform-all-modules
+              (do-annotate top-e expanded-e)
+              (lambda (top-e mod-id)
+                (syntax-case top-e ()
+                  [(mod name init-import mb)
+                   (syntax-case (disarm #'mb) (#%plain-module-begin)
+                     [(#%plain-module-begin body ...)
+                      (let ([meta-depth ((count-meta-levels 0) #'(begin body ...))])
+                        (copy-props
+                         top-e
+                         #`(#,mod-id name init-import
+                                     #,(syntax-rearm
+                                        #`(#%plain-module-begin
+                                           #,(generate-key-imports-at-phase meta-depth 0 key-module-name)
+                                           body ...)
+                                        #'mb))))])])))))]
       [_else
        (let ()
          (define e (do-annotate top-e (do-expand top-e)))
@@ -815,6 +809,9 @@
     (syntax-case stx ()
       [(mod name init-import mb)
        (syntax-case (disarm #'mb) (#%plain-module-begin)
+         [(#%plain-module-begin body ...)
+          (has-cross-phase-declare? #'(body ...))
+          stx]
          [(#%plain-module-begin body ...)
           (let ()
             (define ((handle-top-form phase) expr)
