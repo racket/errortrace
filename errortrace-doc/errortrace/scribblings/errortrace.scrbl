@@ -351,9 +351,8 @@ for use as an error display handler.}
 @defproc[(errortrace-annotate (stx any/c)) any/c]{
 
 Macro-expands and instruments the given top-level form. If the form
-@racket[read]s as a module whose first subexpression is
-@racket[(void '#:errortrace-dont-annotate)] or is a module whose
-name is @racketidfont{errortrace-key}, then
+@racket[read]s as a module whose first subexpression has the same
+shape as @racket[(void '#:errortrace-dont-annotate)], then
 no instrumentation is applied. See the signature element
 @sigelem[stacktrace/errortrace-annotate^ errortrace-annotate]
 (of @racket[stacktrace/errortrace-annotate^])

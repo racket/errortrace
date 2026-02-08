@@ -1,4 +1,4 @@
-(module errortrace-key '#%kernel
+(module errortrace-key '#%kernel (void '#:errortrace-dont-annotate)
 
   ;; this file is badly named; it contains
   ;; all of the code used at runtime by the

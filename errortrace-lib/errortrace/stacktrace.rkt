@@ -754,8 +754,6 @@
   (define (is-key-module? stx)
     (syntax-case stx ()
       [(_module _name _lang (_void (_quote #:errortrace-dont-annotate)) . _more) #t]
-      [(_module _name . _more)
-       (eq? (syntax-e #'name) 'errortrace-key)]
       [_ #f]))
 
   (define (has-cross-phase-declare? e)
