@@ -6,6 +6,7 @@
 (require "stacktrace.rkt"
          (prefix-in ek: "errortrace-key.rkt")
          "private/utils.rkt"
+         "marks-to-context.rkt"
          racket/contract/base
          racket/unit
          racket/list
@@ -401,6 +402,14 @@
             (print-error-trace p exn)
             (orig (get-output-string p) exn))
           (orig msg exn)))))
+
+(errortrace-continuation-mark-set->context
+ (let ([errortrace-lib-continuation-mark-set->context
+        (λ (marks)
+          (map st-mark-source
+               (continuation-mark-set->list marks
+                                            ek:errortrace-key)))])
+   errortrace-lib-continuation-mark-set->context))
 
 (provide/contract
  [annotate-covered-file (->* (path-string?) ((or/c string? #t #f)) void?)]

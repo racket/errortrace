@@ -685,6 +685,26 @@ A parameter set by @sigelem[stacktrace/errortrace-annotate^ errortrace-annotate]
  to the expanded version of its input.
 }
 
+@section[#:tag "marks-to-context"]{Programmatically Extracting Stack-trace Information}
+
+@defmodule[errotrace/marks-to-context]{}
+
+@defparam[errortrace-continuation-mark-set->context
+          proc
+          (or/c #f (-> continuation-mark-set? (listof srcloc?)))
+          #:value (λ (x) #f)]{
+
+ Extracts the list of source locations recorded by
+ @racket[with-mark] from the given
+ @tech[#:doc '(lib "scribblings/reference/reference.scrbl")]{continuation
+  marks}, if it is a procedure. This parameter is expected to
+ be set by an instantiation of the units documented above,
+ e.g., by requiring the @racketmodname[errortrace] library or
+ by enabling @onscreen{Debugging} in DrRacket’s language
+ configuration dialog.
+
+ @history[#:added "1.6"]
+}
 
 @section{Errortrace Key}
 @defmodule[errortrace/errortrace-key]
