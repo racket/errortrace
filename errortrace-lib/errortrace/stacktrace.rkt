@@ -645,6 +645,9 @@
                              (annotate-seq disarmed-expr (syntax body)
                                            no-cache-annotate phase)))])]
          
+         [(#%foreign-inline . _)
+          expr]
+
          [_else
           (error 'errortrace "unrecognized expression form~a~a: ~.s"
                  (if top? " at top-level" "")
