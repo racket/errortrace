@@ -500,6 +500,8 @@
           expr]
          [(quote-syntax . _)
           expr]
+         [(#%foreign-inline . _)
+          expr]
          
          ;; Wrap body, also a profile point
          [(#%plain-lambda args . body)
